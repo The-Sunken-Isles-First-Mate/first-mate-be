@@ -7,16 +7,16 @@ assignees: ''
 
 ---
 
-<brief feature description>
-As a ____
-When I visit ______,
+**<brief feature description>**\
+As a ____\
+When I visit ______,\
 (option 1)
-I want to ______
-so that I can ______
+I want to ______\
+so that I can ______\
 (option 2)
-I expect to be able to _____ which does _______
+I expect to be able to _____ which does _______\
 
-Wireframe Link
+[Wireframe](link)
 
-Subtasks:
+**Subtasks:**
 -
