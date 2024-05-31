@@ -10,8 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 0) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_31_203908) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "name"
+    t.integer "week", default: 0
+    t.integer "animal_products", default: 0
+    t.integer "cloth", default: 0
+    t.integer "farmed_goods", default: 0
+    t.integer "food", default: 0
+    t.integer "foraged_goods", default: 0
+    t.integer "metal", default: 0
+    t.integer "monster_parts", default: 0
+    t.integer "stone", default: 0
+    t.integer "wood", default: 0
+    t.integer "villagers", default: 120
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
