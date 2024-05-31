@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :campaign do 
-    name { Faker::Lorem.words(2) }
+    name { Faker::Lorem.words(number: 2) }
     week { Faker::Number.between(from: 0, to: 10) }
     animal_products { Faker::Number.between(from: 0, to: 10) }
     cloth { Faker::Number.between(from: 0, to: 10) }
