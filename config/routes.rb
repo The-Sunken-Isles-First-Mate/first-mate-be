@@ -10,7 +10,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :campaigns, only: [:show]
+      resources :campaigns, only: [:show, :create, :update]
+      resources :items, only: [:show]
       get '/management_form', to: 'management_forms#show'
     end
   end
