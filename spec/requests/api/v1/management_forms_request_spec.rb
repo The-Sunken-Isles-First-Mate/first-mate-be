@@ -3,19 +3,21 @@ require 'rails_helper'
 RSpec.describe "ManagementForms API" do
   before(:each) do
     @campaign1 = create(:campaign)
-    @management_form1 = create(:management_form, campaign: @campaign1, week: @campaign1.week)
+    @management_form1 = create(:management_form, campaign_id: @campaign1.id, week: @campaign1.week)
   end
 
   describe "ManagementForm Show" do
     it "returns all ManagementForm attributes for a specific management form" do
-      params = {
-        campaign_id: @campaign1.id,
-        week: @campaign1.week
+      valid_attr = { 
+        management_form: {
+          campaign_id: @campaign1.id,
+          week: @campaign1.week
+        }
       }
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
-      get "/api/v1/management_form", headers: headers, params: JSON.generate(params)
+      get "/api/v1/management_form", params: valid_attr, headers: headers
 
       form = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -144,15 +146,18 @@ RSpec.describe "ManagementForms API" do
     end
 
     it "returns a 404 status and error message when an invalid campaign id or week is passed in" do
-      params = {
-        campaign_id: 123123,
-        week: @campaign1.week
+      invalid_attr = { 
+        management_form: {
+          campaign_id: 123123,
+          week: @campaign1.week
+        }
       }
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
-      get "/api/v1/management_form", headers: headers, params: JSON.generate(params)
-      require 'pry'; binding.pry
+      get "/api/v1/management_form", params: invalid_attr, headers: headers
+
+      form = JSON.parse(response.body, symbolize_names: true)[:data]
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
