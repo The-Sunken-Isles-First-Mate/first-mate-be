@@ -113,4 +113,52 @@ RSpec.describe "Campaigns API" do
       expect(data[:errors].first[:title]).to eq("Validation failed: Name can't be blank")
     end
   end
+
+  describe "Campaign Update" do 
+    it "updates a campaigns attributes and returns the campaign" do
+      id = create(:campaign).id
+      starting_wood = Campaign.last.wood
+      starting_villagers = Campaign.last.villagers
+      campaign_params = { wood: 10, villagers: 200 }
+      headers = {"CONTENT_TYPE" => "application/json"}
+      
+      patch "/api/v1/campaigns/#{id}", headers: headers, params: JSON.generate({campaign: campaign_params})
+
+      campaign = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(campaign[:attributes][:wood]).to eq(10)
+      expect(campaign[:attributes][:villagers]).to eq(200)
+    end
+
+    it 'returns a 404 status and error message when an invalid vendor_id is passed in' do
+      campaign_params = { wood: 10 }
+      headers = {"CONTENT_TYPE" => "application/json"}
+      
+      patch "/api/v1/campaigns/123123", headers: headers, params: JSON.generate({campaign: campaign_params})
+      
+      expect(response).to_not be_successful
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:errors].first[:status]).to eq("404")
+      expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
+
+    end
+
+    it "returns a 400 status and error message when an trying to update to nil" do 
+      id = create(:campaign).id
+      campaign_params = { wood: ""}
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/campaigns/#{id}", headers: headers, params:  JSON.generate({campaign: campaign_params})
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:errors].first[:title]).to eq("Validation failed: Wood can't be blank")
+    end
+  end
 end
