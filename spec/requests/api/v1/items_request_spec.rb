@@ -6,7 +6,7 @@ RSpec.describe "items API" do
 
   end
 
-  describe "item Show" do
+  describe "item show" do
     describe "happy path" do 
       it "returns all item attributes for a specific item" do
         get "/api/v1/items/#{@item1.id}"
