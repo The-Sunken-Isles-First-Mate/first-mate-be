@@ -10,6 +10,12 @@ class Api::V1::CampaignsController < ApplicationController
     render json: CampaignSerializer.new(campaign), status: 201
   end
 
+  def update
+    campaign = Campaign.find(params[:id])
+    campaign.update!(campaign_params)
+    render json: CampaignSerializer.new(campaign), status: 200
+  end
+
   private
   def campaign_params
     params.require(:campaign)
