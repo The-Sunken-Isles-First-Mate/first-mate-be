@@ -8,7 +8,7 @@ RSpec.describe "ManagementForms API" do
 
   describe "ManagementForm Show" do
     it "returns all ManagementForm attributes for a specific management form" do
-      valid_attr = { 
+      valid_attr = {
         management_form: {
           campaign_id: @campaign1.id,
           week: @campaign1.week
@@ -145,28 +145,71 @@ RSpec.describe "ManagementForms API" do
       expect(form[:relationships][:campaign][:data][:id]).to be_an(String)
     end
 
-    it "returns a 404 status and error message when an invalid campaign id or week is passed in" do
-      invalid_attr = { 
-        management_form: {
-          campaign_id: 123123,
-          week: @campaign1.week
+    describe 'Sad Paths' do
+      it "returns a 404 status and error message when an invalid campaign id or week is passed in" do
+        invalid_attr = {
+          management_form: {
+            campaign_id: 123123,
+            week: @campaign1.week
+          }
         }
-      }
 
-      headers = {"CONTENT_TYPE" => "application/json"}
+        headers = {"CONTENT_TYPE" => "application/json"}
 
-      get "/api/v1/management_form", params: invalid_attr, headers: headers
+        get "/api/v1/management_form", params: invalid_attr, headers: headers
 
-      form = JSON.parse(response.body, symbolize_names: true)[:data]
+        expect(response).to_not be_successful
+        expect(response.status).to eq(404)
 
-      expect(response).to_not be_successful
-      expect(response.status).to eq(404)
+        data = JSON.parse(response.body, symbolize_names: true)
 
-      data = JSON.parse(response.body, symbolize_names: true)
+        expect(data[:errors]).to be_an(Array)
+        expect(data[:errors].first[:status]).to eq("404")
+        expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
+      end
 
-      expect(data[:errors]).to be_an(Array)
-      expect(data[:errors].first[:status]).to eq("404")
-      expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
+      it "returns a 400 status and error message when an invalid week is passed in" do
+        invalid_attr = {
+          management_form: {
+            campaign_id: @campaign1.id,
+            week: 99
+          }
+        }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        get "/api/v1/management_form", params: invalid_attr, headers: headers
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        data = JSON.parse(response.body, symbolize_names: true)
+
+        expect(data[:errors]).to be_an(Array)
+        expect(data[:errors].first[:status]).to eq("400")
+        expect(data[:errors].first[:title]).to eq("Week cannot be less than 0 or greater than the campaign week")
+      end
+
+      it "returns a 400 status and error message when no campaign id or no week is passed in" do
+        invalid_attr = {
+          management_form: {
+            campaign_id: @campaign1.id
+          }
+        }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        get "/api/v1/management_form", params: invalid_attr, headers: headers
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        data = JSON.parse(response.body, symbolize_names: true)
+
+        expect(data[:errors]).to be_an(Array)
+        expect(data[:errors].first[:status]).to eq("400")
+        expect(data[:errors].first[:title]).to eq("Campaign ID or Week cannot be missing")
+      end
     end
   end
 end
