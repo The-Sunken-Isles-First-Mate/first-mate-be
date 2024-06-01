@@ -3,4 +3,27 @@ class Api::V1::CampaignsController < ApplicationController
     campaign = Campaign.find(params[:id])
     render json: CampaignSerializer.new(campaign)
   end
+
+  def create
+    campaign = Campaign.new(campaign_params)
+    campaign.save!
+    render json: CampaignSerializer.new(campaign), status: 201
+  end
+
+  private
+  def campaign_params
+    params.require(:campaign)
+          .permit(:name, 
+                  :week, 
+                  :animal_products, 
+                  :cloth, 
+                  :farmed_goods, 
+                  :food, 
+                  :foraged_goods, 
+                  :metal, 
+                  :monster_parts, 
+                  :stone, 
+                  :wood, 
+                  :villagers)
+  end
 end
