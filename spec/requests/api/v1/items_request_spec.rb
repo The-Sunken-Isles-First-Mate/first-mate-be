@@ -5,7 +5,7 @@ RSpec.describe "Items API" do
     @item1 = create(:item)
     @item2 = create(:item)
     @campaign1 = create(:campaign)
-    # @campaign1.items << [@item1, @item2]
+    @campaign1.items << [@item1, @item2]
   end
 
   describe "Item Show" do
