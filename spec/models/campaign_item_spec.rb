@@ -9,6 +9,6 @@ RSpec.describe CampaignItem, type: :model do
   describe 'validations' do
     it {should validate_presence_of(:campaign_id)}
     it {should validate_presence_of(:item_id)}
-    it {should validate_presence_of(:quantity_owned)}
+    it {should validate_numericality_of(:quantity_owned)}
   end
 end
