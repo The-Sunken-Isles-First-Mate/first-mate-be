@@ -92,4 +92,29 @@ RSpec.describe "Users API" do
       expect(user[:attributes][:token]).to be_an(String)
     end
   end
+
+  describe '#Sad Paths' do
+    describe 'User Show Sad Path' do
+      it 'returns a 400 status and error message when no username or no token is passed in' do
+        invalid_attr = {
+          user: {
+            username: 'coolusername'
+          }
+        }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        get "/api/v1/users/123123", params: invalid_attr, headers: headers
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        data = JSON.parse(response.body, symbolize_names: true)
+
+        expect(data[:errors]).to be_an(Array)
+        expect(data[:errors].first[:status]).to eq("400")
+        expect(data[:errors].first[:title]).to eq("Username or Token cannot be missing")
+      end
+    end
+  end
 end
