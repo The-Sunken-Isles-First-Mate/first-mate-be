@@ -20,8 +20,8 @@ RSpec.describe "Characters API" do
       expect(character[:attributes]).to have_key(:name)
       expect(character[:attributes][:name]).to be_a(String)
 
-      # expect(character[:attributes]).to have_key(:user_id)
-      # expect(character[:attributes][:user_id]).to be_a(String)
+      expect(character[:attributes]).to have_key(:user_id)
+      expect(character[:attributes][:user_id]).to be_an(Integer)
       
       expect(character[:attributes]).to have_key(:dnd_race)
       expect(character[:attributes][:dnd_race]).to be_a(String)
