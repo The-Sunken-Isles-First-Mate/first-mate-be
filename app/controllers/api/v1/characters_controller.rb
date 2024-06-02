@@ -14,7 +14,7 @@ class Api::V1::CharactersController < ApplicationController
   def character_params
     params.require(:character)
           .permit(:name, 
-                  # :user_id, 
+                  :user_id, 
                   :dnd_race, 
                   :dnd_class, 
                   :image_url)

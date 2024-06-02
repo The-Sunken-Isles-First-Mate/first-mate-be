@@ -46,9 +46,9 @@ RSpec.describe "Characters API" do
 
   describe "Character Create" do
     it "creates a new campaign record when passed the required attributes" do
-      # @user1 = create(:user)
+      @user1 = create(:user)
       character_params = ({ name: "Cap'n Clirrk",
-                            # user_id: @user1.id,
+                            user_id: @user1.id,
                             dnd_race: "Human",
                             dnd_class: "Bard" })
 
@@ -60,14 +60,15 @@ RSpec.describe "Characters API" do
       expect(response).to be_successful
       expect(response.status).to eq 201
       expect(created_character.name).to eq("Cap'n Clirrk")
-      # expect(created_character.user).to eq(@user1)
+      expect(created_character.user).to eq(@user1)
       expect(created_character.dnd_race).to eq("Human")
       expect(created_character.dnd_class).to eq("Bard")
     end
 
     it "returns a 400 status and error message when missing any required attribute" do 
+      @user1 = create(:user)
       character_params = ({ name: "Cap'n Clirrk",
-                            # user_id: @user1.id,
+                            user_id: @user1.id,
                             dnd_class: "Bard" })
 
       headers = {"CONTENT_TYPE" => "application/json"}
