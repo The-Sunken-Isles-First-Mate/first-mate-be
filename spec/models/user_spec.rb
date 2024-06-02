@@ -7,7 +7,7 @@ RSpec.describe User, type: :model do
   describe 'relationships' do
     # it {should have_many(:user_campaigns) }
     # it {should have_many(:campaigns).through(:user_campaigns) }
-    # it {should have_many(:characters) }
+    it {should have_many(:characters) }
   end
 
   describe 'validations' do
