@@ -16,8 +16,54 @@ class Api::V1::ManagementFormsController < ApplicationController
     end
   end
 
+  def update
+    form = ManagementForm.find(params[:id])
+    form.update!(form_params)
+    render json: ManagementFormSerializer.new(form), status: 200
+  end
+
   private
   def find_form_params
     params.require(:management_form).permit(:campaign_id, :week)
+  end
+
+  def form_params
+    params.require(:management_form).permit(
+      :animal_products,
+      :cloth,
+      :farmed_goods,
+      :food,
+      :foraged_goods,
+      :metal,
+      :monster_parts,
+      :stone,
+      :wood,
+      :light_armor,
+      :medium_armor,
+      :heavy_armor,
+      :simple_weapon,
+      :martial_weapon,
+      :ammunition,
+      :adventuring_supplies,
+      :assassins_blood,
+      :malice,
+      :midnight_tears,
+      :serpent_venom,
+      :truth_serum,
+      :oil_of_slipperiness,
+      :potion_of_climbing,
+      :potion_of_healing,
+      :potion_of_water_breathing,
+      :barge,
+      :coracle,
+      :double_hulled_sailing_canoe,
+      :keelboat,
+      :raft,
+      :single_hulled_sailing_canoe,
+      :ballista,
+      :cabin,
+      :magical_defenses,
+      :storage
+      )
   end
 end

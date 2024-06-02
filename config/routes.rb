@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :campaigns, only: [:show, :create, :update]
       resources :items, only: [:show]
+      resources :management_forms, only: [:update]
       get '/management_form', to: 'management_forms#show'
     end
   end
