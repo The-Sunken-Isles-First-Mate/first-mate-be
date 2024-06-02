@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :campaigns, only: [:show, :create, :update]
       resources :items, only: [:show]
       resources :campaign_items, only: [:create, :update]
+      get '/management_form', to: 'management_forms#show'
     end
   end
 end
