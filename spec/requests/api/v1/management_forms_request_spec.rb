@@ -144,8 +144,36 @@ RSpec.describe "ManagementForms API" do
       expect(form[:relationships][:campaign][:data]).to have_key(:id)
       expect(form[:relationships][:campaign][:data][:id]).to be_an(String)
     end
+  end
 
-    describe 'Sad Paths' do
+  describe "ManagementForm Update" do
+    it "updates a ManagementForms attributes and returns the ManagementForm" do
+      original_form = create(:management_form, animal_products: 5, light_armor: 3, raft: 10)
+      original_form_id = original_form.id
+
+      # the below would represent updating the animal_products and light_armor fields while leaving the rest as is
+      form_params = {
+        animal_products: 15,
+        light_armor: 8
+      }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/management_forms/#{original_form_id}", headers: headers, params: JSON.generate({management_form: form_params})
+
+      new_form = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(new_form[:attributes][:coracle]).to eq(original_form.coracle)
+      expect(new_form[:id].to_i).to eq(original_form_id)
+      expect(new_form[:attributes][:raft]).to eq(10)
+      expect(new_form[:attributes][:animal_products]).to eq(15)
+      expect(new_form[:attributes][:light_armor]).to eq(8)
+    end
+  end
+
+  describe 'Sad Paths' do
+    describe 'Get Management Form Sad Paths' do
       it "returns a 404 status and error message when an invalid campaign id or week is passed in" do
         invalid_attr = {
           management_form: {
