@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_01_095702) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_175130) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,8 +55,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_095702) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "campaign_items", "campaigns"
-  add_foreign_key "campaign_items", "items"
   create_table "management_forms", force: :cascade do |t|
     t.bigint "campaign_id", null: false
     t.integer "week", default: 0
@@ -100,5 +98,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_01_095702) do
     t.index ["campaign_id"], name: "index_management_forms_on_campaign_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "uid"
+    t.string "username"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "campaign_items", "campaigns"
+  add_foreign_key "campaign_items", "items"
   add_foreign_key "management_forms", "campaigns"
 end
