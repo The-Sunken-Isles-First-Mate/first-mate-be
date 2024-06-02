@@ -4,7 +4,6 @@ RSpec.describe Campaign, type: :model do
   describe 'relationships' do
     it { should have_many(:campaign_items) }
     it { should have_many(:items).through(:campaign_items) }
-
   end
 
   describe 'validations' do
@@ -32,6 +31,5 @@ RSpec.describe Campaign, type: :model do
     it {should validate_numericality_of(:stone)}
     it {should validate_numericality_of(:wood)}
     it {should validate_numericality_of(:villagers)}
-
   end
 end
