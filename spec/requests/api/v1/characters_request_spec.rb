@@ -75,13 +75,13 @@ RSpec.describe "Characters API" do
       post "/api/v1/characters", headers: headers, params: JSON.generate(character: character_params)
 
       expect(response).to_not be_successful
-      expect(response.status).to eq(400)
+      expect(response.status).to eq(422)
 
       data = JSON.parse(response.body, symbolize_names: true)
       
       expect(data[:errors]).to be_an(Array)
-      expect(data[:errors].first[:status]).to eq("400")
-      expect(data[:errors].first[:title]).to eq("Validation failed: Dnd_race can't be blank")
+      expect(data[:errors].first[:status]).to eq("422")
+      expect(data[:errors].first[:title]).to eq("Validation failed: Dnd race can't be blank")
     end
   end
 end
