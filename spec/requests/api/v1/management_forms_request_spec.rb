@@ -239,5 +239,25 @@ RSpec.describe "ManagementForms API" do
         expect(data[:errors].first[:title]).to eq("Campaign ID or Week cannot be missing")
       end
     end
+
+    describe 'Update Management Forms Sad Paths' do
+      it 'returns a 404 status and error message when an invalid management_form ID is passed in' do
+        form_params = {
+          animal_products: 15,
+          light_armor: 8
+        }
+
+        headers = {"CONTENT_TYPE" => "application/json"}
+
+        patch "/api/v1/management_forms/123123", headers: headers, params: JSON.generate({management_form: form_params})
+
+        expect(response).to_not be_successful
+
+        data = JSON.parse(response.body, symbolize_names: true)
+
+        expect(data[:errors].first[:status]).to eq("404")
+        expect(data[:errors].first[:title]).to eq("Couldn't find ManagementForm with 'id'=123123")
+      end
+    end
   end
 end
