@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :item do 
-    name { Faker::Lorem.words(number: 2) }
+    name { Faker::Lorem.word }
     animal_products_cost { Faker::Number.between(from: 0, to: 10) }
     cloth_cost { Faker::Number.between(from: 0, to: 10) }
     farmed_goods_cost { Faker::Number.between(from: 0, to: 10) }
