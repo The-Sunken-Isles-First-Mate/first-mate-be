@@ -8,5 +8,7 @@ class AddDefaultToItemResourceCostFields < ActiveRecord::Migration[7.1]
     change_column_default :items, :metal_cost, 0
     change_column_default :items, :stone_cost, 0
     change_column_default :items, :wood_cost, 0
+    add_column :items, :monster_parts_cost, :integer
+    change_column_default :items, :monster_parts_cost, 0
   end
 end
