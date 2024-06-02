@@ -1,5 +1,7 @@
 class Campaign < ApplicationRecord
- has_many :items  validates :name, :week, :animal_products, :cloth, :farmed_goods, 
+ has_many :items  
+ 
+ validates :name, :week, :animal_products, :cloth, :farmed_goods, 
             :food, :foraged_goods, :metal, :monster_parts, :stone, 
             :wood, :villagers, presence: true
 
