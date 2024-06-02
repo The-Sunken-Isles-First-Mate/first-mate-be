@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_175130) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_200654) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -99,11 +99,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_175130) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "uid"
+    t.string "uid", null: false
     t.string "username"
     t.string "token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_users_on_uid", unique: true
   end
 
   add_foreign_key "campaign_items", "campaigns"
