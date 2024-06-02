@@ -6,8 +6,19 @@ class Api::V1::CampaignsController < ApplicationController
 
   def create
     campaign = Campaign.new(campaign_params)
-    campaign.save!
-    render json: CampaignSerializer.new(campaign), status: 201
+
+    if campaign.save
+      # Create campaign items for pre-made items
+      Item.all.each do |item|
+        campaign.campaign_items.create(item_id: item.id)
+      end
+      
+      render json: CampaignSerializer.new(campaign), status: 201
+    # else
+    #   render json: campaign.errors, status: :unprocessable_entity
+    end
+    # campaign.save!
+    # render json: CampaignSerializer.new(campaign), status: 201
   end
 
   def update
