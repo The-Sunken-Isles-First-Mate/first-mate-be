@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_164924) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_200551) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,14 +52,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_164924) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.integer "animal_products_cost"
-    t.integer "cloth_cost"
-    t.integer "farmed_goods_cost"
-    t.integer "food_cost"
-    t.integer "foraged_goods_cost"
-    t.integer "metal_cost"
-    t.integer "stone_cost"
-    t.integer "wood_cost"
+    t.integer "animal_products_cost", default: 0
+    t.integer "cloth_cost", default: 0
+    t.integer "farmed_goods_cost", default: 0
+    t.integer "food_cost", default: 0
+    t.integer "foraged_goods_cost", default: 0
+    t.integer "metal_cost", default: 0
+    t.integer "stone_cost", default: 0
+    t.integer "wood_cost", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
