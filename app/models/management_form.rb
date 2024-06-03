@@ -22,6 +22,7 @@ class ManagementForm < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 
   validate :valid_villager_distribution, on: :update
+  validate :valid_resource_fields, on: :update
 
   private
   def valid_villager_distribution
@@ -33,5 +34,30 @@ class ManagementForm < ApplicationRecord
 
   def villager_distribution_count
     animal_products + cloth + farmed_goods + food + foraged_goods + metal + monster_parts + stone + wood
+  end
+
+  def valid_resource_fields
+    resource_fields.each do |field, value|
+      unless divisible_by_ten_or_zero?(value)
+        errors.add(:base, "Villagers must be dispatched in groups of 10. Please try again.")
+      end
+    end
+  end
+
+  def divisible_by_ten_or_zero?(value)
+    value == 0 || value % 10 == 0
+  end
+
+  def resource_fields
+    { animal_products: animal_products,
+      cloth: cloth,
+      farmed_goods: farmed_goods,
+      food: food,
+      foraged_goods: foraged_goods,
+      metal: metal,
+      monster_parts: monster_parts,
+      stone: stone,
+      wood: wood
+    }
   end
 end
