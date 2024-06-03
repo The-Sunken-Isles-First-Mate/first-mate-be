@@ -31,22 +31,31 @@ RSpec.describe "Characters API" do
 
       expect(character[:attributes]).to have_key(:user_id)
       expect(character[:attributes][:user_id]).to be_an(Integer)
-      
+
       expect(character[:attributes]).to have_key(:dnd_race)
       expect(character[:attributes][:dnd_race]).to be_a(String)
-      
+
       expect(character[:attributes]).to have_key(:dnd_class)
       expect(character[:attributes][:dnd_class]).to be_a(String)
+
+      expect(character[:relationships]).to have_key(:user)
+      expect(character[:relationships][:user]).to be_a Hash
+
+      expect(character[:relationships]).to have_key(:user_campaigns)
+      expect(character[:relationships][:user_campaigns]).to be_a Hash
+
+      expect(character[:relationships]).to have_key(:campaigns)
+      expect(character[:relationships][:campaigns]).to be_a Hash
     end
 
-    it "returns a 404 status and error message when an invalid character id is passed in" do 
-      get "/api/v1/characters/123123" 
+    it "returns a 404 status and error message when an invalid character id is passed in" do
+      get "/api/v1/characters/123123"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
 
       data = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("404")
       expect(data[:errors].first[:title]).to eq("Couldn't find Character with 'id'=123123")
@@ -54,7 +63,7 @@ RSpec.describe "Characters API" do
   end
 
   describe "Character Create" do
-    it "creates a new campaign record when passed the required attributes" do
+    it "creates a new character record when passed the required attributes" do
       @user1 = create(:user)
       character_params = ({ name: "Cap'n Clirrk",
                             user_id: @user1.id,
@@ -62,10 +71,10 @@ RSpec.describe "Characters API" do
                             dnd_class: "Bard" })
 
       headers = {"CONTENT_TYPE" => "application/json"}
-    
+
       post "/api/v1/characters", headers: headers, params: JSON.generate(character: character_params)
       created_character = Character.last
-    
+
       expect(response).to be_successful
       expect(response.status).to eq 201
       expect(created_character.name).to eq("Cap'n Clirrk")
@@ -74,21 +83,21 @@ RSpec.describe "Characters API" do
       expect(created_character.dnd_class).to eq("Bard")
     end
 
-    it "returns a 400 status and error message when missing any required attribute" do 
+    it "returns a 400 status and error message when missing any required attribute" do
       @user1 = create(:user)
       character_params = ({ name: "Cap'n Clirrk",
                             user_id: @user1.id,
                             dnd_class: "Bard" })
 
       headers = {"CONTENT_TYPE" => "application/json"}
-    
+
       post "/api/v1/characters", headers: headers, params: JSON.generate(character: character_params)
 
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
 
       data = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("422")
       expect(data[:errors].first[:title]).to eq("Validation failed: Dnd race can't be blank")
@@ -106,20 +115,20 @@ RSpec.describe "Characters API" do
 
       expect(characters).to be_an(Array)
       expect(characters.count).to eq(3)
-      
+
       characters.each do |character|
         expect(character).to have_key(:id)
         expect(character[:id]).to be_a(String)
-  
+
         expect(character[:attributes]).to have_key(:name)
         expect(character[:attributes][:name]).to be_a(String)
-  
+
         expect(character[:attributes]).to have_key(:user_id)
         expect(character[:attributes][:user_id]).to be_an(Integer)
-  
+
         expect(character[:attributes]).to have_key(:dnd_race)
         expect(character[:attributes][:dnd_race]).to be_a(String)
-  
+
         expect(character[:attributes]).to have_key(:dnd_class)
         expect(character[:attributes][:dnd_class]).to be_a(String)
 
@@ -127,14 +136,14 @@ RSpec.describe "Characters API" do
       end
     end
 
-    it "returns a 404 status and error message when an invalid campaign id is passed in" do 
-      get "/api/v1/campaigns/123123/characters" 
+    it "returns a 404 status and error message when an invalid campaign id is passed in" do
+      get "/api/v1/campaigns/123123/characters"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
 
       data = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("404")
       expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
