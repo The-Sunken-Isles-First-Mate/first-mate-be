@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_02_204613) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_02_214213) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -109,6 +109,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_204613) do
     t.index ["campaign_id"], name: "index_management_forms_on_campaign_id"
   end
 
+  create_table "user_campaigns", force: :cascade do |t|
+    t.integer "role", default: 0
+    t.bigint "character_id"
+    t.bigint "campaign_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_user_campaigns_on_campaign_id"
+    t.index ["character_id"], name: "index_user_campaigns_on_character_id"
+    t.index ["user_id"], name: "index_user_campaigns_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "uid", null: false
     t.string "username"
@@ -122,4 +134,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_02_204613) do
   add_foreign_key "campaign_items", "items"
   add_foreign_key "characters", "users"
   add_foreign_key "management_forms", "campaigns"
+  add_foreign_key "user_campaigns", "campaigns"
+  add_foreign_key "user_campaigns", "characters"
+  add_foreign_key "user_campaigns", "users"
 end

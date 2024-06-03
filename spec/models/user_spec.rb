@@ -5,8 +5,8 @@ RSpec.describe User, type: :model do
     @user1 = create(:user, uid: 'abc123', username: 'coolusername', token: 'abcdefghjk124abc')
   end
   describe 'relationships' do
-    # it {should have_many(:user_campaigns) }
-    # it {should have_many(:campaigns).through(:user_campaigns) }
+    it {should have_many(:user_campaigns) }
+    it {should have_many(:campaigns).through(:user_campaigns) }
     it {should have_many(:characters) }
   end
 
