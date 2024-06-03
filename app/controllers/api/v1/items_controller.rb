@@ -5,8 +5,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def index
-    campaign = Campaign.find(params[:campaign_id])
-    items = campaign.items
+    items = Item.all
     render json: ItemSerializer.new(items)
   end
 end
