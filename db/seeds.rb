@@ -8,7 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Campaign.create(name: "testtesttest")
 require 'csv'
 CampaignItem.delete_all
 Item.delete_all
