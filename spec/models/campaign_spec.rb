@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Campaign, type: :model do
   describe 'relationships' do
+    it { should have_many(:user_campaigns) }
+    it { should have_many(:users).through(:user_campaigns) }
+    it { should have_many(:characters).through(:user_campaigns) }
     it { should have_many(:campaign_items) }
     it { should have_many(:items).through(:campaign_items) }
   end
