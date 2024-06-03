@@ -7,10 +7,14 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-require 'csv'
 
-def load_items_from_csv(file_path)
-  CSV.foreach(file_path, headers: true) do |row|
+Campaign.create(name: "testtesttest")
+require 'csv'
+CampaignItem.delete_all
+Item.delete_all
+
+def load_items_from_csv(csv)
+  csv.each do |row|
     Item.create!(
       name: row['name'],
       animal_products_cost: row['animal_products_cost'] || 0,
@@ -27,5 +31,7 @@ def load_items_from_csv(file_path)
 end
 
 # Load items from the CSV file
-csv_file_path = Rails.root.join('db/items.csv')
-load_items_from_csv(csv_file_path)
+csv_text = File.read(Rails.root.join('db', 'items.csv'))
+csv = CSV.parse(csv_text, headers: true)
+load_items_from_csv(csv)
+puts "Seeded successfully"
