@@ -12,14 +12,16 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :characters, only: [:show, :create]
       resources :campaigns, only: [:show, :create, :update] do
-        resources :items, only: [:index]
+        #resources :items, only: [:index]
+        #get '/campaign/:id/campaign_items', to: 'items#campaign_item_index', as: :campaign_items
       end
-      resources :items, only: [:show]
+      resources :items, only: [:index, :show]
       resources :management_forms, only: [:update]
       resources :campaign_items, only: [:create, :update]
       resources :users, only: [:show]
       resources :user_campaigns, only: [:create]
       get '/management_form', to: 'management_forms#show'
+      get '/campaigns/:id/items', to: 'campaigns/items#index'
     end
   end
 end
