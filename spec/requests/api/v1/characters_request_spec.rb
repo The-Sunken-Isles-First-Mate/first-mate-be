@@ -2,11 +2,16 @@ require 'rails_helper'
 
 RSpec.describe "Characters API" do
   before(:each) do
-    @character1 = create(:character)
-    @character2 = create(:character)
-    @character3 = create(:character)
+    @user1 = create(:user)
+    @user2 = create(:user)
+    @user3 = create(:user)
+    @character1 = create(:character, user_id: @user1.id)
+    @character2 = create(:character, user_id: @user2.id)
+    @character3 = create(:character, user_id: @user3.id)
     @campaign1 = create(:campaign)
-    @campaign1.characters << [@character1, @character2, @character3]
+    @user_campaign1 = create(:user_campaign, user_id: @user1.id, campaign_id: @campaign1.id)
+    @user_campaign2 = create(:user_campaign, user_id: @user2.id, campaign_id: @campaign1.id)
+    @user_campaign3 = create(:user_campaign, user_id: @user3.id, campaign_id: @campaign1.id)
   end
 
   describe "Character Show" do
@@ -109,8 +114,8 @@ RSpec.describe "Characters API" do
         expect(character[:attributes]).to have_key(:name)
         expect(character[:attributes][:name]).to be_a(String)
   
-        # expect(character[:attributes]).to have_key(:user_id)
-        # expect(character[:attributes][:user_id]).to be_an(String)
+        expect(character[:attributes]).to have_key(:user_id)
+        expect(character[:attributes][:user_id]).to be_an(Integer)
   
         expect(character[:attributes]).to have_key(:dnd_race)
         expect(character[:attributes][:dnd_race]).to be_a(String)
