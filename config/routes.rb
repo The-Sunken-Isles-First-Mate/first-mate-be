@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       resources :characters, only: [:show, :create]
       resources :campaigns, only: [:show, :create, :update] do
         resources :items, only: [:index]
+        resources :characters, only: [:index]
       end
       resources :items, only: [:show]
       resources :management_forms, only: [:update]
