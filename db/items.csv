@@ -1,0 +1,28 @@
+name,animal_products_cost,cloth_cost,farmed_goods_cost,food_cost,foraged_goods_cost,metal_cost,monster_parts_cost,stone_cost,wood_cost
+Light Armor,1,0,0,0,0,1,0,0,0
+Medium Armor,1,0,0,0,0,2,0,0,0
+Heavy Armor,0,0,0,0,0,3,0,0,0
+Simple Weapon,0,0,0,0,0,1,0,0,1
+Martial Weapon,0,0,0,0,0,2,0,0,1
+Ammunition,0,0,0,0,0,0,0,0,1
+Ammunition,0,0,0,0,0,1,0,0,0
+Adventuring Supplies,1,0,0,0,1,0,0,0,1
+Assassin's Blood,0,0,0,0,1,0,0,0,0
+Malice,0,0,0,0,1,0,0,0,0
+Midnight Tears,0,0,0,0,1,0,0,0,0
+Serpent Venom,0,0,0,0,1,0,1,0,0
+Truth Serum,0,0,0,0,1,0,1,0,0
+Oil of Slipperiness,0,0,0,0,1,0,1,0,0
+Potion of Climbing,0,0,0,0,1,0,2,0,0
+Potion of Healing,0,0,0,0,1,0,2,0,0
+Potion of Water Breathing,0,0,0,0,1,0,2,0,0
+Barge,0,2,0,0,0,0,0,0,10
+Coracle,0,2,0,0,0,0,0,0,2
+Double-Hulled Sailing Canoe,0,2,0,0,0,0,0,0,7
+Keelboat,0,2,0,0,0,0,0,0,5
+Raft,0,0,0,0,0,0,0,0,3
+Single-Hulled Sailing Canoe,0,2,0,0,0,0,0,0,5
+Ballista,0,0,0,0,0,0,0,0,3
+Cabin,0,0,2,0,0,0,0,0,7
+Magical Defenses,0,0,0,0,0,0,0,9,3
+Storage,0,0,0,0,0,0,0,0,7
