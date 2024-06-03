@@ -8,6 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
+# add a conditional to confirm that we're not in production and if not, run this.  If production, no deletions
 require 'csv'
 CampaignItem.delete_all
 Item.delete_all
