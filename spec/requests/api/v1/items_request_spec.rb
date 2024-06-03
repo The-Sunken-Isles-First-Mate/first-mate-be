@@ -2,15 +2,12 @@ require 'rails_helper'
 
 RSpec.describe "Items API" do
   before(:each) do
-    @item1 = create(:item)
-    @item2 = create(:item)
     @campaign1 = create(:campaign)
-    @campaign1.items << [@item1, @item2]
   end
 
   describe "Item Show" do
     it "returns all item attributes for a specific item" do
-      get "/api/v1/items/#{@item1.id}"
+      get "/api/v1/items/#{Item.first.id}"
 
       item = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -72,7 +69,7 @@ RSpec.describe "Items API" do
       expect(response.status).to eq(200)
 
       expect(items).to be_an(Array)
-      expect(items.count).to eq(2)
+      expect(items.count).to eq(27)
       
       items.each do |item|
         expect(item).to have_key(:id)

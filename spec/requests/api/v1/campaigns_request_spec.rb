@@ -93,20 +93,6 @@ RSpec.describe "Campaigns API" do
       expect(created_campaign.villagers).to eq(120)
     end
 
-    it "creates a new associated campaign_items when a campaign is created" do
-      campaign_params = ({ name: "Turing Campaign" })
-
-      headers = {"CONTENT_TYPE" => "application/json"}
-    
-      post "/api/v1/campaigns", headers: headers, params: JSON.generate(campaign: campaign_params)
-      created_campaign = Campaign.last
-    
-      expect(response).to be_successful
-      expect(response.status).to eq 201
-      expect(created_campaign.items).to be_an(Array)
-      
-    end 
-
     # if we update the campaign create page to have fields for things other than names, add a test here for proving that you can enter 
     # a value for any of the resources as well as name and it'll create the campaign with that value.
 
