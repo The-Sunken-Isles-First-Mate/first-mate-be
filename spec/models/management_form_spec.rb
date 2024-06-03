@@ -88,4 +88,18 @@ RSpec.describe ManagementForm, type: :model do
 
     expect(form).to be_a ManagementForm
   end
+
+  it "will not update the management_form if sum of resource fields is greater than number of villagers" do
+    @campaign1 = create(:campaign)
+    @management_form = ManagementForm.create(campaign: @campaign1, week: 0)
+
+    expect(@campaign1.villagers).to eq(120)
+
+    @management_form.update!(cloth: 100)
+    expect(@management_form.cloth).to eq(100)
+    expect(@management_form.errors[:base]).to be_empty
+
+    @management_form.update(animal_products: 100, cloth: 100)
+    expect(@management_form.errors[:base]).to eq(["You cannot allocate more than 120 villagers to collect resources. Please try again."])
+  end
 end
