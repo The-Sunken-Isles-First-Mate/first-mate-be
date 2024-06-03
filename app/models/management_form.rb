@@ -24,6 +24,70 @@ class ManagementForm < ApplicationRecord
   validate :valid_villager_distribution, on: :update
   validate :valid_resource_fields, on: :update
   validate :valid_building_allocation, on: :update
+  validate :check_resources, on: :update
+
+  def check_resources
+    campaign = self.campaign
+    total_resources_needed = Hash.new(0)
+
+    items_to_build.each do |item_name, quantity|
+      item = Item.find_by(name: item_name.to_s.humanize)
+
+      resources_needed = {
+        animal_products: item.animal_products_cost * quantity,
+        cloth: item.cloth_cost * quantity,
+        farmed_goods: item.farmed_goods_cost * quantity,
+        food: item.food_cost * quantity,
+        foraged_goods: item.foraged_goods_cost * quantity,
+        metal: item.metal_cost * quantity,
+        monster_parts: item.monster_parts_cost * quantity,
+        stone: item.stone_cost * quantity,
+        wood: item.wood_cost * quantity
+      }
+
+      resources_needed.each do |resource, cost|
+        total_resources_needed[resource] += cost
+      end
+    end
+
+    total_resources_needed.each do |resource, total_cost|
+      if campaign.send(resource) < total_cost
+        errors.add(:base, "You do not have the resources to build that item. Please try again.")
+        return
+      end
+    end
+  end
+
+  def items_to_build
+    {
+      light_armor: light_armor,
+      medium_armor: medium_armor,
+      heavy_armor: heavy_armor,
+      simple_weapon: simple_weapon,
+      martial_weapon: martial_weapon,
+      ammunition: ammunition,
+      adventuring_supplies: adventuring_supplies,
+      assassins_blood: assassins_blood,
+      malice: malice,
+      midnight_tears: midnight_tears,
+      serpent_venom: serpent_venom,
+      truth_serum: truth_serum,
+      oil_of_slipperiness: oil_of_slipperiness,
+      potion_of_climbing: potion_of_climbing,
+      potion_of_healing: potion_of_healing,
+      potion_of_water_breathing: potion_of_water_breathing,
+      barge: barge,
+      coracle: coracle,
+      double_hulled_sailing_canoe: double_hulled_sailing_canoe,
+      keelboat: keelboat,
+      raft: raft,
+      single_hulled_sailing_canoe: single_hulled_sailing_canoe,
+      ballista: ballista,
+      cabin: cabin,
+      magical_defenses: magical_defenses,
+      storage: storage
+    }.select { |_item, quantity| quantity > 0 }
+  end
 
   private
   def valid_villager_distribution
@@ -50,7 +114,8 @@ class ManagementForm < ApplicationRecord
   end
 
   def resource_fields
-    { animal_products: animal_products,
+    { 
+      animal_products: animal_products,
       cloth: cloth,
       farmed_goods: farmed_goods,
       food: food,
