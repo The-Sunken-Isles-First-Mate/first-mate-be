@@ -118,4 +118,28 @@ RSpec.describe ManagementForm, type: :model do
     @management_form.update(cloth: 3)
     expect(@management_form.errors[:base]).to eq(["Villagers must be dispatched in groups of 10. Please try again."])
   end
+
+  it "will only update the management_form if the sum of all 'buiding' items is less than or equal to 1" do
+    @campaign1 = create(:campaign)
+    @management_form = ManagementForm.create(campaign: @campaign1, week: 0)
+
+    @management_form.update!(cabin: 1)
+    expect(@management_form.cabin).to eq(1)
+    expect(@management_form.errors[:base]).to be_empty
+
+    # adding an additional building to update when one already has a value
+    @management_form.update(magical_defenses: 1)
+    expect(@management_form.errors[:base]).to eq(["You cannot commission more than one building per week. Please try again."])
+
+    @management_form.delete
+    # adding more than one building to a single field
+    @management_form = ManagementForm.create(campaign: @campaign1, week: 0)
+
+    @management_form.update(magical_defenses: 2)
+    expect(@management_form.errors[:base]).to eq(["You cannot commission more than one building per week. Please try again."])
+  end
+
+  it "will only update the management_form if the total number of each resource_cost field from each item is less than the respective campaign resource value" do
+
+  end
 end

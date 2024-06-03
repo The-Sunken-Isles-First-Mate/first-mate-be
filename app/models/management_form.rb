@@ -23,6 +23,7 @@ class ManagementForm < ApplicationRecord
 
   validate :valid_villager_distribution, on: :update
   validate :valid_resource_fields, on: :update
+  validate :valid_building_allocation, on: :update
 
   private
   def valid_villager_distribution
@@ -59,5 +60,15 @@ class ManagementForm < ApplicationRecord
       stone: stone,
       wood: wood
     }
+  end
+
+  def valid_building_allocation
+    if building_allocation_count > 1
+      errors.add(:base, "You cannot commission more than one building per week. Please try again.")
+    end
+  end
+
+  def building_allocation_count
+    magical_defenses + cabin + storage
   end
 end

@@ -148,13 +148,14 @@ RSpec.describe "ManagementForms API" do
 
   describe "ManagementForm Update" do
     it "updates a ManagementForms attributes and returns the ManagementForm" do
-      original_form = create(:management_form, animal_products: 5, light_armor: 3, raft: 10)
+      # original_form = create(:management_form, animal_products: 5, light_armor: 3, raft: 10)
+      original_form = create(:management_form, raft: 1)
       original_form_id = original_form.id
 
       # the below would represent updating the animal_products and light_armor fields while leaving the rest as is
       form_params = {
-        animal_products: 15,
-        light_armor: 8
+        animal_products: 10,
+        light_armor: 20
       }
 
       headers = {"CONTENT_TYPE" => "application/json"}
@@ -166,9 +167,9 @@ RSpec.describe "ManagementForms API" do
       expect(response).to be_successful
       expect(new_form[:attributes][:coracle]).to eq(original_form.coracle)
       expect(new_form[:id].to_i).to eq(original_form_id)
-      expect(new_form[:attributes][:raft]).to eq(10)
-      expect(new_form[:attributes][:animal_products]).to eq(15)
-      expect(new_form[:attributes][:light_armor]).to eq(8)
+      expect(new_form[:attributes][:raft]).to eq(1)
+      expect(new_form[:attributes][:animal_products]).to eq(10)
+      expect(new_form[:attributes][:light_armor]).to eq(20)
     end
   end
 
