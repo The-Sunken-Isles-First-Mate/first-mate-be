@@ -2,7 +2,16 @@ require 'rails_helper'
 
 RSpec.describe "Characters API" do
   before(:each) do
-    @character1 = create(:character)
+    @user1 = create(:user)
+    @user2 = create(:user)
+    @user3 = create(:user)
+    @character1 = create(:character, user_id: @user1.id)
+    @character2 = create(:character, user_id: @user2.id)
+    @character3 = create(:character, user_id: @user3.id)
+    @campaign1 = create(:campaign)
+    @user_campaign1 = create(:user_campaign, user_id: @user1.id, campaign_id: @campaign1.id)
+    @user_campaign2 = create(:user_campaign, user_id: @user2.id, campaign_id: @campaign1.id)
+    @user_campaign3 = create(:user_campaign, user_id: @user3.id, campaign_id: @campaign1.id)
   end
 
   describe "Character Show" do
@@ -83,6 +92,52 @@ RSpec.describe "Characters API" do
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("422")
       expect(data[:errors].first[:title]).to eq("Validation failed: Dnd race can't be blank")
+    end
+  end
+
+  describe "Campaign Characters Index" do
+    it "returns all characters and their attributes for a specific campaign" do
+      get "/api/v1/campaigns/#{@campaign1.id}/characters"
+
+      characters = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      expect(characters).to be_an(Array)
+      expect(characters.count).to eq(3)
+      
+      characters.each do |character|
+        expect(character).to have_key(:id)
+        expect(character[:id]).to be_a(String)
+  
+        expect(character[:attributes]).to have_key(:name)
+        expect(character[:attributes][:name]).to be_a(String)
+  
+        expect(character[:attributes]).to have_key(:user_id)
+        expect(character[:attributes][:user_id]).to be_an(Integer)
+  
+        expect(character[:attributes]).to have_key(:dnd_race)
+        expect(character[:attributes][:dnd_race]).to be_a(String)
+  
+        expect(character[:attributes]).to have_key(:dnd_class)
+        expect(character[:attributes][:dnd_class]).to be_a(String)
+
+        expect(character[:attributes]).to have_key(:image_url)
+      end
+    end
+
+    it "returns a 404 status and error message when an invalid campaign id is passed in" do 
+      get "/api/v1/campaigns/123123/characters" 
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+      
+      expect(data[:errors]).to be_an(Array)
+      expect(data[:errors].first[:status]).to eq("404")
+      expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
     end
   end
 end

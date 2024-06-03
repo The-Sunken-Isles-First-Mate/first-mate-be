@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe "User Campaigns API" do
+RSpec.describe "UserCampaigns API" do
   before(:each) do
     @campaign1 = create(:campaign)
     @user1 = create(:user)
     @character1 = create(:character, user_id: @user1.id)
   end
 
-  describe "User Campaign Create" do
+  describe "UserCampaign Create" do
     it "creates a new user campaign record when passed the required attributes" do
       user_campaign_params = (
         {

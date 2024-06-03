@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "campaign items API" do
-  describe "campaign item create" do
+RSpec.describe "CampaignItems API" do
+  describe "CampaignItem Create" do
     describe "happy path" do 
       before(:each) do
         @item1 = create(:item)
@@ -71,7 +71,7 @@ RSpec.describe "campaign items API" do
     end
   end
 
-  describe "campaign item update" do 
+  describe "CampaignItem Update" do 
     describe "happy path" do
       before(:each) do
         @item1 = create(:item)
