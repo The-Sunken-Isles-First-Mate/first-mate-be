@@ -7,7 +7,8 @@ class Api::V1::CampaignsController < ApplicationController
   def create
     campaign = Campaign.new(campaign_params)
 
-    if campaign.save
+    if campaign.save!
+
       # Create campaign items for pre-made items
       Item.all.each do |item|
         campaign.campaign_items.create(item_id: item.id)
