@@ -63,6 +63,11 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   config.include FactoryBot::Syntax::Methods
+
+  config.before(:suite) do
+    # Load seeds before the test suite runs
+    Rails.application.load_seed
+  end
 end
 
 Shoulda::Matchers.configure do |config|

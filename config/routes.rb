@@ -12,8 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :characters, only: [:show, :create]
       resources :campaigns, only: [:show, :create, :update] do
-        #resources :items, only: [:index]
-        #get '/campaign/:id/campaign_items', to: 'items#campaign_item_index', as: :campaign_items
+        resources :characters, only: [:index]
       end
       resources :items, only: [:index, :show]
       resources :management_forms, only: [:update]

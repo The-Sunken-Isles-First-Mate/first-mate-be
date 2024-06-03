@@ -35,4 +35,15 @@ RSpec.describe Campaign, type: :model do
     it {should validate_numericality_of(:wood)}
     it {should validate_numericality_of(:villagers)}
   end
+
+  it "creates campaign_items from the Items in the seed database when a campaign is created" do
+    @campaign1 = Campaign.create(name: "Test Campaign")
+
+    expect(@campaign1.items.count).to eq(27)
+
+    @campaign1.items.each do |item|
+      expect(item).to be_an(Item)
+      expect(item.name).to be_an(String)
+    end
+  end
 end

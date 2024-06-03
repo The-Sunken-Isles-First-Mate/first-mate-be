@@ -8,5 +8,6 @@ class ItemSerializer
              :foraged_goods_cost,
              :metal_cost,
              :stone_cost,
-             :wood_cost
+             :wood_cost,
+             :monster_parts_cost
 end

@@ -10,6 +10,12 @@ class Api::V1::CharactersController < ApplicationController
     render json: CharacterSerializer.new(character), status: 201
   end
 
+  def index
+    campaign = Campaign.find(params[:campaign_id])
+    characters = campaign.characters
+    render json: CharacterSerializer.new(characters)
+  end
+
   private
   def character_params
     params.require(:character)
