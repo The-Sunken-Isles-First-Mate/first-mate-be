@@ -16,6 +16,21 @@ class Api::V1::CampaignsController < ApplicationController
     render json: CampaignSerializer.new(campaign), status: 200
   end
 
+  def advance_week
+    campaign = Campaign.find(params[:campaign_id])
+    management_form = ManagementForm.new(management_form_params)
+    if management_form.save
+      campaign.update!(week: campaign.week + 1)
+      update_campaign_resources(campaign, management_form)
+      subtract_item_costs(campaign, management_form)
+      create_new_management_form(campaign)
+      update_campaign_items_quantity(management_form)
+      render json: CampaignSerializer.new(campaign), status: 200
+    else
+      render json: { error: management_form.errors.full_messages }, status: 422
+    end
+  end
+
   private
   def campaign_params
     params.require(:campaign)
