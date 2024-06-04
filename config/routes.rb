@@ -11,7 +11,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :characters, only: [:show, :create]
-      resources :campaigns, only: [:show, :create, :update] 
+      resources :campaigns, only: [:show, :create, :update] do
+        post :advance_week
+      end
       resources :items, only: [:index, :show]
       resources :management_forms, only: [:update]
       resources :campaign_items, only: [:create, :update]
