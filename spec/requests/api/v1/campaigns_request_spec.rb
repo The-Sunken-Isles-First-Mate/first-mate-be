@@ -258,4 +258,63 @@ RSpec.describe "Campaigns API" do
       expect(data[:errors].first[:title]).to eq("Validation failed: Wood must be an integer")
     end
   end
+
+  describe "Campaign Advance Week" do
+    it "..." do
+      @campaign = create(:campaign, wood: 20, metal: 20, animal_products: 20, week: 2)
+      @management_form = create(:management_form, campaign: @campaign, week: 2)
+
+      params = {
+        campaign_id: @campaign.id,
+        week: @campaign.week,
+        animal_products: 20,
+        cloth: 30,
+        farmed_goods: 10,
+        food: 0,
+        foraged_goods: 0,
+        metal: 0,
+        monster_parts: 0,
+        stone: 0,
+        wood: 10,
+        light_armor: 1,
+        medium_armor: 1,
+        heavy_armor: 0,
+        simple_weapon: 0,
+        martial_weapon: 0,
+        ammunition: 0,
+        adventuring_supplies: 0,
+        assassins_blood: 0,
+        malice: 0,
+        midnight_tears: 0,
+        serpent_venom: 0,
+        truth_serum: 0,
+        oil_of_slipperiness: 0,
+        potion_of_climbing: 0,
+        potion_of_healing: 0,
+        potion_of_water_breathing: 0,
+        barge: 0,
+        coracle: 0,
+        double_hulled_sailing_canoe: 0,
+        keelboat: 0,
+        raft: 1,
+        single_hulled_sailing_canoe: 0,
+        ballista: 0,
+        cabin: 0,
+        magical_defenses: 0,
+        storage: 0
+        }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/campaigns/#{@campaign.id}/advance_week", headers: headers, params: JSON.generate({campaign: params})
+
+      campaign = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(campaign[:attributes][:name]).to eq(original_campaign.name)
+      expect(campaign[:attributes][:stone]).to eq(12)
+      expect(campaign[:attributes][:wood]).to eq(15)
+      expect(campaign[:attributes][:villagers]).to eq(120)
+    end
+  end
 end
