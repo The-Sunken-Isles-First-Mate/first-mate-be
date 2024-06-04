@@ -22,46 +22,61 @@ RSpec.describe "Campaigns API" do
 
       expect(campaign[:attributes]).to have_key(:week)
       expect(campaign[:attributes][:week]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:animal_products)
       expect(campaign[:attributes][:animal_products]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:cloth)
       expect(campaign[:attributes][:cloth]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:farmed_goods)
       expect(campaign[:attributes][:farmed_goods]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:food)
       expect(campaign[:attributes][:food]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:foraged_goods)
       expect(campaign[:attributes][:foraged_goods]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:metal)
       expect(campaign[:attributes][:metal]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:monster_parts)
       expect(campaign[:attributes][:monster_parts]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:stone)
       expect(campaign[:attributes][:stone]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:wood)
       expect(campaign[:attributes][:wood]).to be_an(Integer)
-      
+
       expect(campaign[:attributes]).to have_key(:villagers)
       expect(campaign[:attributes][:villagers]).to be_an(Integer)
+
+      expect(campaign[:relationships]).to have_key(:user_campaigns)
+      expect(campaign[:relationships][:user_campaigns]).to be_a Hash
+
+      expect(campaign[:relationships]).to have_key(:users)
+      expect(campaign[:relationships][:users]).to be_a Hash
+
+      expect(campaign[:relationships]).to have_key(:characters)
+      expect(campaign[:relationships][:characters]).to be_a Hash
+
+      expect(campaign[:relationships]).to have_key(:campaign_items)
+      expect(campaign[:relationships][:campaign_items]).to be_a Hash
+
+      expect(campaign[:relationships]).to have_key(:items)
+      expect(campaign[:relationships][:items]).to be_a Hash
     end
 
-    it "returns a 404 status and error message when an invalid campaign id is passed in" do 
-      get "/api/v1/campaigns/123123" 
+    it "returns a 404 status and error message when an invalid campaign id is passed in" do
+      get "/api/v1/campaigns/123123"
 
       expect(response).to_not be_successful
       expect(response.status).to eq(404)
 
       data = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("404")
       expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
@@ -73,10 +88,10 @@ RSpec.describe "Campaigns API" do
       campaign_params = ({ name: "Turing Campaign" })
 
       headers = {"CONTENT_TYPE" => "application/json"}
-    
+
       post "/api/v1/campaigns", headers: headers, params: JSON.generate(campaign: campaign_params)
       created_campaign = Campaign.last
-    
+
       expect(response).to be_successful
       expect(response.status).to eq 201
       expect(created_campaign.name).to eq("Turing Campaign")
@@ -93,28 +108,28 @@ RSpec.describe "Campaigns API" do
       expect(created_campaign.villagers).to eq(120)
     end
 
-    # if we update the campaign create page to have fields for things other than names, add a test here for proving that you can enter 
+    # if we update the campaign create page to have fields for things other than names, add a test here for proving that you can enter
     # a value for any of the resources as well as name and it'll create the campaign with that value.
 
-    it "returns a 400 status and error message when missing the name attribute" do 
+    it "returns a 400 status and error message when missing the name attribute" do
       campaign_params = ({ name: "" })
 
       headers = {"CONTENT_TYPE" => "application/json"}
-    
+
       post "/api/v1/campaigns", headers: headers, params: JSON.generate(campaign: campaign_params)
 
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
 
       data = JSON.parse(response.body, symbolize_names: true)
-      
+
       expect(data[:errors]).to be_an(Array)
       expect(data[:errors].first[:status]).to eq("422")
       expect(data[:errors].first[:title]).to eq("Validation failed: Name can't be blank")
     end
   end
 
-  describe "Campaign Update" do 
+  describe "Campaign Update" do
     it "updates a campaigns attributes and returns the campaign" do
       id = create(:campaign).id
       original_campaign = Campaign.last
@@ -134,7 +149,7 @@ RSpec.describe "Campaigns API" do
                           villagers: 200 }
 
       headers = {"CONTENT_TYPE" => "application/json"}
-      
+
       patch "/api/v1/campaigns/#{id}", headers: headers, params: JSON.generate({campaign: campaign_params})
 
       campaign = JSON.parse(response.body, symbolize_names: true)[:data]
@@ -162,9 +177,9 @@ RSpec.describe "Campaigns API" do
                           wood: 10,
                           villagers: 200 }
       headers = {"CONTENT_TYPE" => "application/json"}
-      
+
       patch "/api/v1/campaigns/#{id}", headers: headers, params: JSON.generate({campaign: campaign_params})
-      
+
       expect(response).to_not be_successful
 
       data = JSON.parse(response.body, symbolize_names: true)
@@ -187,9 +202,9 @@ RSpec.describe "Campaigns API" do
                           wood: 10,
                           villagers: 200 }
       headers = {"CONTENT_TYPE" => "application/json"}
-      
+
       patch "/api/v1/campaigns/123123", headers: headers, params: JSON.generate({campaign: campaign_params})
-      
+
       expect(response).to_not be_successful
 
       data = JSON.parse(response.body, symbolize_names: true)
@@ -198,7 +213,7 @@ RSpec.describe "Campaigns API" do
       expect(data[:errors].first[:title]).to eq("Couldn't find Campaign with 'id'=123123")
     end
 
-    it "returns a 422 status and error message when an trying to update any of the integer fields with a non-integer value" do 
+    it "returns a 422 status and error message when an trying to update any of the integer fields with a non-integer value" do
       id = create(:campaign).id
       campaign_params = { wood: "one"}
       headers = {"CONTENT_TYPE" => "application/json"}
@@ -207,13 +222,13 @@ RSpec.describe "Campaigns API" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
-      
+
       data = JSON.parse(response.body, symbolize_names: true)
 
       expect(data[:errors].first[:title]).to eq("Validation failed: Wood is not a number")
     end
 
-    it "returns a 422 status and error message when an trying to update any of the integer fields with a number less than 0" do 
+    it "returns a 422 status and error message when an trying to update any of the integer fields with a number less than 0" do
       id = create(:campaign).id
       campaign_params = { wood: -1}
       headers = {"CONTENT_TYPE" => "application/json"}
@@ -222,13 +237,13 @@ RSpec.describe "Campaigns API" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
-      
+
       data = JSON.parse(response.body, symbolize_names: true)
 
       expect(data[:errors].first[:title]).to eq("Validation failed: Wood must be greater than or equal to 0")
     end
 
-    it "returns a 422 status and error message when an trying to update any of the integer fields with a float" do 
+    it "returns a 422 status and error message when an trying to update any of the integer fields with a float" do
       id = create(:campaign).id
       campaign_params = { wood: 1.1 }
       headers = {"CONTENT_TYPE" => "application/json"}
@@ -237,7 +252,7 @@ RSpec.describe "Campaigns API" do
 
       expect(response).to_not be_successful
       expect(response.status).to eq(422)
-      
+
       data = JSON.parse(response.body, symbolize_names: true)
 
       expect(data[:errors].first[:title]).to eq("Validation failed: Wood must be an integer")

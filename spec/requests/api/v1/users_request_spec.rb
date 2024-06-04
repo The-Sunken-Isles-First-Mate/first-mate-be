@@ -37,6 +37,16 @@ RSpec.describe "Users API" do
 
       expect(user[:attributes]).to have_key(:token)
       expect(user[:attributes][:token]).to be_an(String)
+
+      expect(user[:relationships]).to have_key(:user_campaigns)
+      expect(user[:relationships][:user_campaigns]).to be_a Hash
+
+      expect(user[:relationships]).to have_key(:campaigns)
+      expect(user[:relationships][:campaigns]).to be_a Hash
+
+      expect(user[:relationships]).to have_key(:characters)
+      expect(user[:relationships][:characters]).to be_a Hash
+
     end
 
     it "updates a users username and token if passed new info in the params" do
