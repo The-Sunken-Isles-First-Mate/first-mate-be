@@ -7,6 +7,7 @@ RSpec.describe Campaign, type: :model do
     it { should have_many(:characters).through(:user_campaigns) }
     it { should have_many(:campaign_items) }
     it { should have_many(:items).through(:campaign_items) }
+    it { should have_many(:management_forms) }
   end
 
   describe 'validations' do
@@ -45,5 +46,16 @@ RSpec.describe Campaign, type: :model do
       expect(item).to be_an(Item)
       expect(item.name).to be_an(String)
     end
+  end
+
+  it "creates a management_form campaign is created" do
+    expect(ManagementForm.all.count).to eq 0
+
+    @campaign1 = Campaign.create(name: "Test Campaign")
+
+    expect(ManagementForm.all.count).to eq 1
+
+    expect(@campaign1.management_forms.first).to be_a(ManagementForm)
+    expect(@campaign1.management_forms.first.week).to eq(0)
   end
 end
