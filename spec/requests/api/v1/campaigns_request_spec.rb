@@ -1,11 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe "Campaigns API" do
-  before(:each) do
-    @campaign1 = create(:campaign)
-  end
+
 
   describe "Campaign Show" do
+    before(:each) do
+      @campaign1 = create(:campaign)
+    end
+
     it "returns all campaign attributes for a specific campaign" do
       get "/api/v1/campaigns/#{@campaign1.id}"
 
@@ -84,6 +86,10 @@ RSpec.describe "Campaigns API" do
   end
 
   describe "Campaign Create" do
+    before(:each) do
+      @campaign1 = create(:campaign)
+    end
+
     it "creates a new campaign record when passed the required attributes" do
       campaign_params = ({ name: "Turing Campaign" })
 
@@ -130,6 +136,10 @@ RSpec.describe "Campaigns API" do
   end
 
   describe "Campaign Update" do
+    before(:each) do
+      @campaign1 = create(:campaign)
+    end
+
     it "updates a campaigns attributes and returns the campaign" do
       id = create(:campaign).id
       original_campaign = Campaign.last
@@ -260,14 +270,15 @@ RSpec.describe "Campaigns API" do
   end
 
   describe "Campaign Advance Week" do
-    it "..." do
-      @campaign = create(:campaign, wood: 20, metal: 20, animal_products: 20, week: 2)
+    before(:each) do
+      @campaign = create(:campaign, food: 30, wood: 20, metal: 20, animal_products: 20, week: 2)
+
       @management_form = create(:management_form, campaign: @campaign, week: 2)
 
-      params = {
+      @params = {
         campaign_id: @campaign.id,
         week: @campaign.week,
-        animal_products: 20,
+        animal_products: 30,
         cloth: 30,
         farmed_goods: 10,
         food: 0,
@@ -306,15 +317,60 @@ RSpec.describe "Campaigns API" do
 
       headers = {"CONTENT_TYPE" => "application/json"}
 
-      post "/api/v1/campaigns/#{@campaign.id}/advance_week", headers: headers, params: JSON.generate({campaign: params})
+      post "/api/v1/campaigns/#{@campaign.id}/advance_week", headers: headers, params: JSON.generate({campaign: @params})
 
-      campaign = JSON.parse(response.body, symbolize_names: true)[:data]
+      @campaign_response = JSON.parse(response.body, symbolize_names: true)[:data]
+    end
 
+    it "returns a 200 status and all updated campaign attributes" do
       expect(response).to be_successful
-      expect(campaign[:attributes][:name]).to eq(original_campaign.name)
-      expect(campaign[:attributes][:stone]).to eq(12)
-      expect(campaign[:attributes][:wood]).to eq(15)
-      expect(campaign[:attributes][:villagers]).to eq(120)
+      expect(response.status).to eq(200)
+      expect(@campaign_response[:attributes][:name]).to eq(@campaign.name)
+      expect(@campaign_response[:attributes][:food]).to eq(30)
+      expect(@campaign_response[:attributes][:villagers]).to eq(120)
+      expect(@campaign_response[:attributes][:week]).to eq(3)
+      
+      expect(@campaign.cloth).to eq 0
+      expect(@campaign_response[:attributes][:cloth]).to eq(3)
+      
+      expect(@campaign.farmed_goods).to eq 0
+      expect(@campaign_response[:attributes][:farmed_goods]).to eq(1)
+      
+      # item crafting for light armor, medium armor, and a raft consumes 2 animal_products, 3 metal, and 3 wood
+      expect(@campaign.animal_products).to eq(20)
+      # started with 20, gained 3 from villagers, spent 2 on crafting, resulting in 21 remaining.
+      expect(@campaign_response[:attributes][:animal_products]).to eq(21)
+
+      expect(@campaign.wood).to eq(20)
+      # started with 20, gained 1 from villagers, spent 3 on crafting, resulting in 18 remaining.
+      expect(@campaign_response[:attributes][:wood]).to eq(18)
+
+      expect(@campaign.metal).to eq(20)
+      # started with 20, gained 0 from villagers, spent 3 on crafting, resulting in 17 remaining.
+      expect(@campaign_response[:attributes][:metal]).to eq(17)
+    end
+
+    it "creates a new management_form from the updated campaign data" do
+      management_form = ManagementForm.last
+
+      expect(management_form.campaign).to eq(@campaign)
+      expect(management_form.week).to eq(3)
+      expect(management_form.light_armor).to eq(0)
+      expect(management_form.wood).to eq(0)
+    end
+
+    it "updates the quantity_owned of campaign_items for any items created " do
+      light_armor_id = Item.all.find_by(name: "Light armor").id
+      medium_armor_id = Item.all.find_by(name: "Medium armor").id
+      raft_id = Item.all.find_by(name: "Raft").id
+      
+      light_armor_quant = @campaign.campaign_items.find_by(item_id: light_armor_id).quantity_owned
+      medium_armor_quant = @campaign.campaign_items.find_by(item_id: medium_armor_id).quantity_owned
+      raft_quant = @campaign.campaign_items.find_by(item_id: raft_id).quantity_owned
+
+      expect(light_armor_quant).to eq(1)
+      expect(medium_armor_quant).to eq(1)
+      expect(raft_quant).to eq(1)
     end
   end
 end
