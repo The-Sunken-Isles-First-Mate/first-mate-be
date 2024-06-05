@@ -1,4 +1,5 @@
 class CharacterSerializer
+  include Rails.application.routes.url_helpers
   include JSONAPI::Serializer
   attributes :name,
              :user_id,
