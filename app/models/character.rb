@@ -17,15 +17,15 @@ class Character < ApplicationRecord
   #   rails_blob_path(image, only_path: true)
   # end
 
-  def character_image_details
-    return unless self.character_image.attached?
-    
-    self.character_image.blob.attributes
-        .slice('filename', 'byte_size', 'id')
-        .merge(url: character_image_url(self.character_image))
-  end
+  # def character_image_details
+  #   return unless self.character_image.attached?
 
-  def character_image_url(image)
-    Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
-  end
+  #   self.character_image.blob.attributes
+  #       .slice('filename', 'byte_size', 'id')
+  #       .merge(url: character_image_url(self.character_image))
+  # end
+
+  # def character_image_url(image)
+  #   Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+  # end
 end
