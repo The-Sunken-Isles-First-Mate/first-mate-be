@@ -24,38 +24,20 @@ RSpec.describe "campaign items API" do
         expect(item).to have_key(:id)
         expect(item[:id]).to be_a(String)
 
-        expect(item[:attributes]).to have_key(:name)
-        expect(item[:attributes][:name]).to be_a(String)
+        expect(item[:attributes]).to have_key(:campaign_id)
+        expect(item[:attributes][:campaign_id]).to be_a(Integer)
 
-        expect(item[:attributes]).to have_key(:animal_products_cost)
-        expect(item[:attributes][:animal_products_cost]).to be_an(Integer)
+        expect(item[:attributes]).to have_key(:item_id)
+        expect(item[:attributes][:item_id]).to be_an(Integer)
 
-        expect(item[:attributes]).to have_key(:cloth_cost)
-        expect(item[:attributes][:cloth_cost]).to be_an(Integer)
+        expect(item[:attributes]).to have_key(:quantity_owned)
+        expect(item[:attributes][:quantity_owned]).to be_an(Integer)
 
-        expect(item[:attributes]).to have_key(:farmed_goods_cost)
-        expect(item[:attributes][:farmed_goods_cost]).to be_an(Integer)
+        expect(item[:relationships]).to have_key(:campaign)
+        expect(item[:relationships][:campaign]).to be_an(Hash)
 
-        expect(item[:attributes]).to have_key(:food_cost)
-        expect(item[:attributes][:food_cost]).to be_an(Integer)
-
-        expect(item[:attributes]).to have_key(:foraged_goods_cost)
-        expect(item[:attributes][:foraged_goods_cost]).to be_an(Integer)
-
-        expect(item[:attributes]).to have_key(:metal_cost)
-        expect(item[:attributes][:metal_cost]).to be_an(Integer)
-
-        expect(item[:attributes]).to have_key(:stone_cost)
-        expect(item[:attributes][:stone_cost]).to be_an(Integer)
-
-        expect(item[:attributes]).to have_key(:wood_cost)
-        expect(item[:attributes][:wood_cost]).to be_an(Integer)
-
-        expect(item[:relationships]).to have_key(:campaign_items)
-        expect(item[:relationships][:campaign_items]).to be_an(Hash)
-
-        expect(item[:relationships]).to have_key(:campaigns)
-        expect(item[:relationships][:campaigns]).to be_an(Hash)
+        expect(item[:relationships]).to have_key(:item)
+        expect(item[:relationships][:item]).to be_an(Hash)
       end
     end
 
