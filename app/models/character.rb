@@ -6,14 +6,26 @@ class Character < ApplicationRecord
 
   validates_presence_of :name, :dnd_race, :dnd_class, :user_id
 
-  def character_image
-    return unless object.image.attached?
-      object.image.blob.attributes
+  # def character_image_details
+  #   return unless self.character_image.attached?
+  #     self.character_image.blob.attributes
+  #       .slice('filename', 'byte_size', 'id')
+  #       .merge(url: character_image_url(self.character_image))
+  # end
+
+  # def character_image_url(image)
+  #   rails_blob_path(image, only_path: true)
+  # end
+
+  def character_image_details
+    return unless self.character_image.attached?
+    
+    self.character_image.blob.attributes
         .slice('filename', 'byte_size', 'id')
-        .merge(url: character_image_url(object.image))
+        .merge(url: character_image_url(self.character_image))
   end
 
   def character_image_url(image)
-    rails_blob_path(image, only_path: true)
+    Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
   end
 end
