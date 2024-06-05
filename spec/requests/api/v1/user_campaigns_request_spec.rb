@@ -55,4 +55,53 @@ RSpec.describe "UserCampaigns API" do
       expect(data[:errors].first[:title]).to eq("Validation failed: Campaign must exist, Campaign can't be blank")
     end
   end
+
+  describe "User Campaigns Index" do
+    it "returns all user campaigns and their attributes for a specific user" do
+      create(:user_campaign, user_id: @user1.id, campaign_id: @campaign1.id, character_id: @character1.id)
+
+      get "/api/v1/users/#{@user1.id}/user_campaigns"
+
+      campaigns = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      expect(campaigns).to be_an(Array)
+      expect(campaigns.count).to eq(1)
+
+      campaigns.each do |campaign|
+        expect(campaign).to have_key(:id)
+        expect(campaign[:id]).to be_a(String)
+
+        expect(campaign).to have_key(:type)
+        expect(campaign[:type]).to eq('user_campaign')
+
+        expect(campaign[:attributes]).to have_key(:role)
+        expect(campaign[:attributes][:role]).to be_a(String)
+
+        expect(campaign[:relationships]).to have_key(:user)
+        expect(campaign[:relationships][:user]).to be_an(Hash)
+
+        expect(campaign[:relationships]).to have_key(:campaign)
+        expect(campaign[:relationships][:campaign]).to be_a(Hash)
+
+        expect(campaign[:relationships]).to have_key(:character)
+        expect(campaign[:relationships][:character]).to be_a(Hash)
+      end
+    end
+
+    it "returns a 404 status and error message when an invalid user id is passed in" do
+      get "/api/v1/users/12312312312/user_campaigns"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:errors]).to be_an(Array)
+      expect(data[:errors].first[:status]).to eq("404")
+      expect(data[:errors].first[:title]).to eq("Couldn't find User with 'id'=12312312312")
+    end
+  end
 end

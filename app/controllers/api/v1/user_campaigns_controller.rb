@@ -5,6 +5,12 @@ class Api::V1::UserCampaignsController < ApplicationController
     render json: UserCampaignSerializer.new(user_campaign), status: 201
   end
 
+  def index
+    user = User.find(params[:user_id])
+    campaigns = user.user_campaigns
+    render json: UserCampaignSerializer.new(campaigns)
+  end
+
   private
   def user_campaign_params
     params.require(:user_campaign)
