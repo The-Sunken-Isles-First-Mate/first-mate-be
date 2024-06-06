@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       resources :users, only: [:show] do
         resources :user_campaigns, only: [:index]
       end
-      resources :user_campaigns, only: [:create]
+      resources :user_campaigns, only: [:create, :update]
       get '/management_form', to: 'management_forms#show'
       get '/campaigns/:id/characters', to: 'campaigns/characters#index'
       get '/campaigns/:id/items', to: 'campaigns/items#index'

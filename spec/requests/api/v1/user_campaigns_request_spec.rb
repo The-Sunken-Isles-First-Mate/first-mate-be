@@ -104,4 +104,27 @@ RSpec.describe "UserCampaigns API" do
       expect(data[:errors].first[:title]).to eq("Couldn't find User with 'id'=12312312312")
     end
   end
+
+  describe "UserCampaign Update" do
+    it "updates a UserCampaigns attributes and returns the UserCampaign" do
+      user = create(:user)
+      character = create(:character, user_id: user.id)
+      original_user_campaign = create(:user_campaign, character_id: nil, role: 0)
+      original_user_campaign_id = original_user_campaign.id
+
+      user_campaign_params = {
+        character_id: character.id
+      }
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/user_campaigns/#{original_user_campaign_id}", headers: headers, params: JSON.generate({user_campaign: user_campaign_params})
+
+      updated_user_campaign = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(response).to be_successful
+      expect(updated_user_campaign[:id].to_i).to eq(original_user_campaign_id)
+      expect(updated_user_campaign[:relationships][:character][:data][:id].to_i).to eq(character.id)
+    end
+  end
 end
