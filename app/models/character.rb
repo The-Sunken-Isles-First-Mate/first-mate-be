@@ -25,7 +25,7 @@ class Character < ApplicationRecord
   #       .merge(url: character_image_url(self.character_image))
   # end
 
-  # def character_image_url(image)
-  #   Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
-  # end
+  def character_image_url(character_image)
+    Rails.application.routes.url_helpers.rails_blob_path(character_image, only_path: true)
+  end
 end

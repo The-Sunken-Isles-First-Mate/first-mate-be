@@ -67,10 +67,13 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
   config.include FactoryBot::Syntax::Methods
 
-  # config.before(:suite) do
-  #   # Load seeds before the test suite runs
-  #   Rails.application.load_seed
-  # end
+  config.before(:suite) do
+    unless Item.exists?
+      csv_text = File.read(Rails.root.join('db', 'items.csv'))
+      csv = CSV.parse(csv_text, headers: true)
+      load_items_from_csv(csv)
+    end
+  end
 end
 
 Shoulda::Matchers.configure do |config|
