@@ -55,9 +55,168 @@ This app was designed and built with a team of 5 developers as part of the [cons
 
 <details>
   <summary>Database Schema</summary>
-  ```
-    INSERT SCHEMA HERE
-  ```
+  
+```
+ActiveRecord::Schema[7.1].define(version: 2024_06_05_154955) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "campaign_items", force: :cascade do |t|
+    t.bigint "item_id", null: false
+    t.bigint "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "quantity_owned", default: 0
+    t.index ["campaign_id"], name: "index_campaign_items_on_campaign_id"
+    t.index ["item_id"], name: "index_campaign_items_on_item_id"
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "name"
+    t.integer "week", default: 0
+    t.integer "animal_products", default: 0
+    t.integer "cloth", default: 0
+    t.integer "farmed_goods", default: 0
+    t.integer "food", default: 0
+    t.integer "foraged_goods", default: 0
+    t.integer "metal", default: 0
+    t.integer "monster_parts", default: 0
+    t.integer "stone", default: 0
+    t.integer "wood", default: 0
+    t.integer "villagers", default: 120
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "characters", force: :cascade do |t|
+    t.string "name"
+    t.string "dnd_race"
+    t.string "dnd_class"
+    t.string "image_url"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_characters_on_user_id"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.integer "animal_products_cost", default: 0
+    t.integer "cloth_cost", default: 0
+    t.integer "farmed_goods_cost", default: 0
+    t.integer "food_cost", default: 0
+    t.integer "foraged_goods_cost", default: 0
+    t.integer "metal_cost", default: 0
+    t.integer "stone_cost", default: 0
+    t.integer "wood_cost", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "monster_parts_cost", default: 0
+  end
+
+  create_table "management_forms", force: :cascade do |t|
+    t.bigint "campaign_id", null: false
+    t.integer "week", default: 0
+    t.integer "animal_products", default: 0
+    t.integer "cloth", default: 0
+    t.integer "farmed_goods", default: 0
+    t.integer "food", default: 0
+    t.integer "foraged_goods", default: 0
+    t.integer "metal", default: 0
+    t.integer "monster_parts", default: 0
+    t.integer "stone", default: 0
+    t.integer "wood", default: 0
+    t.integer "light_armor", default: 0
+    t.integer "medium_armor", default: 0
+    t.integer "heavy_armor", default: 0
+    t.integer "simple_weapon", default: 0
+    t.integer "martial_weapon", default: 0
+    t.integer "ammunition", default: 0
+    t.integer "adventuring_supplies", default: 0
+    t.integer "assassins_blood", default: 0
+    t.integer "malice", default: 0
+    t.integer "midnight_tears", default: 0
+    t.integer "serpent_venom", default: 0
+    t.integer "truth_serum", default: 0
+    t.integer "oil_of_slipperiness", default: 0
+    t.integer "potion_of_climbing", default: 0
+    t.integer "potion_of_healing", default: 0
+    t.integer "potion_of_water_breathing", default: 0
+    t.integer "barge", default: 0
+    t.integer "coracle", default: 0
+    t.integer "double_hulled_sailing_canoe", default: 0
+    t.integer "keelboat", default: 0
+    t.integer "raft", default: 0
+    t.integer "single_hulled_sailing_canoe", default: 0
+    t.integer "ballista", default: 0
+    t.integer "cabin", default: 0
+    t.integer "magical_defenses", default: 0
+    t.integer "storage", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_management_forms_on_campaign_id"
+  end
+
+  create_table "user_campaigns", force: :cascade do |t|
+    t.integer "role", default: 0
+    t.bigint "character_id"
+    t.bigint "campaign_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_user_campaigns_on_campaign_id"
+    t.index ["character_id"], name: "index_user_campaigns_on_character_id"
+    t.index ["user_id"], name: "index_user_campaigns_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "uid", null: false
+    t.string "username"
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_users_on_uid", unique: true
+  end
+
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "campaign_items", "campaigns"
+  add_foreign_key "campaign_items", "items"
+  add_foreign_key "characters", "users"
+  add_foreign_key "management_forms", "campaigns"
+  add_foreign_key "user_campaigns", "campaigns"
+  add_foreign_key "user_campaigns", "characters"
+  add_foreign_key "user_campaigns", "users"
+end
+```
 </details>
 
 ## External APIs and Services
@@ -171,7 +330,7 @@ Body:
 
 ```json
 {
-  "name": "Turing Campaign",
+  "name": "Turing Campaign"
 }
 ```
 
@@ -263,28 +422,29 @@ Response: `status: 200`
 
 ```json
 { 
-  "data": [{
-    "id": "1",
-    "type": "character"
-    "attributes": {
-       "name": "Cap'n Clirrk",
-       "user_id": 1,
-       "race": "human",
-       "class": "bard",
-       "image_url": UPDATE WITH HOW A URL SHOULD APPEAR
-    },
-    {"id": "2",
-    "type": "character"
-    "attributes": {
-       "name": "Sambo",
-       "user_id": 2,
-       "race": "Ogre",
-       "class": "Monk",
-       "image_url": UPDATE WITH HOW A URL SHOULD APPEAR
-    },
-  ...,
-  ...,
-  }
+  "data": [
+    {
+      "id": "1",
+      "type": "character"
+      "attributes": {
+         "name": "Cap'n Clirrk",
+         "user_id": 1,
+         "race": "human",
+         "class": "bard",
+         "image_url": nil
+      },
+      {"id": "2",
+      "type": "character"
+      "attributes": {
+         "name": "Sambo",
+         "user_id": 2,
+         "race": "Ogre",
+         "class": "Monk",
+         "image_url": nil
+      },
+    }
+    ...,
+  ]
 }
 ```
 </details>
@@ -376,11 +536,20 @@ Body:
 ```json
 {
    "campaign_id": 1,
-   "week": 1,
+   "week": 1
    "animal_products": 1,
    "cloth": 1,
    "farmed_goods": 1,
-   ...,
+   "food": 0,
+   "foraged_goods": 0,
+   "metal": 0,
+   "monster_parts": 0,
+   "stone": 0,
+   "wood": 0,
+   "campaign": {
+     "week": 1
+     ...,
+  }
 }
 ```
 
@@ -434,7 +603,8 @@ Response: `status: 200`
        "user_id": 1,
        "race": "human",
        "class": "bard",
-       "image_url": UPDATE WITH HOW A URL SHOULD APPEAR
+       "image_url": null,
+       "character_image": null
     }
   }
 }
@@ -460,7 +630,8 @@ Body:
   "dnd_race": "Human",
   "dnd_class": "Monk",
   "user_id": 1,
-  "image_url": UPDATE WITH HOW A URL SHOULD APPEAR
+  "image_url": null,
+  "character_image": null
 }
 ```
 
@@ -476,7 +647,8 @@ Response: `status: 201`
        "user_id": 1,
        "dnd_race": "Human",
        "dnd_class": "Monk",
-       "image_url": UPDATE WITH HOW A URL SHOULD APPEAR
+       "image_url": null,
+       "character_image": null
     }
   }
 }
@@ -534,7 +706,8 @@ Response: `status: 201`
 
 ```json
 { 
-  "data": [{
+  "data": [
+    {
     "id": "1",
     "type": "item"
     "attributes": {
@@ -563,10 +736,12 @@ Response: `status: 201`
        "monster_parts_cost": 0,
        "stone_cost": 0,
        "wood_cost": 0
-    },
-  ...,
-  ...,
-  }
+        },
+      ...,
+      ...,
+      }
+    }
+  ]
 }
 ```
 </details>
@@ -587,9 +762,9 @@ Body:
 
 ```json
 {
-  management_form: {
+  "management_form": {
     "cloth": 20,
-    "farmed_goods": 5
+    "farmed_goods": 10
   }
 }
 ```
@@ -605,7 +780,7 @@ Response: `status: 200`
        "campaign_id": "1",
        "week": 1,
        "cloth": 20,
-       "farmed_goods": 5,
+       "farmed_goods": 10,
        "food": 0,
        "foraged_goods": 0,
        ...,
@@ -641,7 +816,13 @@ Response: `status: 201`
 
 ```json
 {
-     "message": "Successfully added user to campaign" 
+  "data": {
+    "id": "4",
+    "type": "user_campaign",
+    "attributes": {
+      "role": "party_member"
+    }
+  }
 }
 ```
 </details>
