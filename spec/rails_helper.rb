@@ -1,6 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
 SimpleCov.start
+require 'csv'
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -71,7 +72,9 @@ RSpec.configure do |config|
     unless Item.exists?
       csv_text = File.read(Rails.root.join('db', 'items.csv'))
       csv = CSV.parse(csv_text, headers: true)
-      load_items_from_csv(csv)
+      csv.each do |row|
+        Item.create(row)
+      end
     end
   end
 end

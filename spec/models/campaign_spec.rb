@@ -49,11 +49,11 @@ RSpec.describe Campaign, type: :model do
   end
 
   it "creates a management_form campaign is created" do
-    expect(ManagementForm.all.count).to eq 2
+    expect(ManagementForm.all.count).to eq 0
 
     @campaign1 = Campaign.create(name: "Test Campaign")
 
-    expect(ManagementForm.all.count).to eq 3
+    expect(ManagementForm.all.count).to eq 1
 
     expect(@campaign1.management_forms.first).to be_a(ManagementForm)
     expect(@campaign1.management_forms.first.week).to eq(0)
