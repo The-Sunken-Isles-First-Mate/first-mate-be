@@ -17,6 +17,7 @@ gem 'turbo-rails'
 gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 gem 'jsonapi-serializer'
 gem 'aws-sdk-s3'
+gem 'csv'
 
 group :development, :test do
   gem 'capybara'
