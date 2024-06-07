@@ -116,6 +116,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
+    csv (3.3.0)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -334,6 +335,7 @@ DEPENDENCIES
   aws-sdk-s3
   bootsnap
   capybara
+  csv
   debug
   factory_bot_rails
   faker
