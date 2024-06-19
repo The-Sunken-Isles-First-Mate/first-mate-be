@@ -6,7 +6,7 @@ class Api::V1::UserCampaignsController < ApplicationController
   end
 
   def index
-    user = User.find(params[:user_id])
+    user = User.find_by(uid: params[:user_id])
     campaigns = user.user_campaigns
     render json: UserCampaignSerializer.new(campaigns)
   end
