@@ -58,9 +58,9 @@ RSpec.describe "UserCampaigns API" do
 
   describe "User Campaigns Index" do
     it "returns all user campaigns and their attributes for a specific user" do
-      create(:user_campaign, user_id: @user1.id, campaign_id: @campaign1.id, character_id: @character1.id)
+      create(:user_campaign, user: @user1, campaign_id: @campaign1.id, character_id: @character1.id)
 
-      get "/api/v1/users/#{@user1.id}/user_campaigns"
+      get "/api/v1/users/#{@user1.uid}/user_campaigns"
 
       campaigns = JSON.parse(response.body, symbolize_names: true)[:data]
 
@@ -91,17 +91,16 @@ RSpec.describe "UserCampaigns API" do
       end
     end
 
-    it "returns a 404 status and error message when an invalid user id is passed in" do
+    it "returns a 400 status and error message when an invalid user id is passed in" do
       get "/api/v1/users/12312312312/user_campaigns"
-
+      
       expect(response).to_not be_successful
-      expect(response.status).to eq(404)
+      expect(response.status).to eq(400)
 
       data = JSON.parse(response.body, symbolize_names: true)
-
       expect(data[:errors]).to be_an(Array)
-      expect(data[:errors].first[:status]).to eq("404")
-      expect(data[:errors].first[:title]).to eq("Couldn't find User with 'id'=12312312312")
+      expect(data[:errors].first[:status]).to eq("400")
+      expect(data[:errors].first[:title]).to eq("Couldn't find that user")
     end
   end
 
