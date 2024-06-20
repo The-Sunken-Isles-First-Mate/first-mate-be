@@ -6,9 +6,13 @@ class Api::V1::UserCampaignsController < ApplicationController
   end
 
   def index
-    user = User.find(params[:user_id])
-    campaigns = user.user_campaigns
-    render json: UserCampaignSerializer.new(campaigns)
+    if user = User.find_by(uid: params[:user_id])
+      campaigns = user.user_campaigns
+      render json: UserCampaignSerializer.new(campaigns)
+    else 
+      render json: { errors: [{status: '400', title:"Couldn't find that user" }]},
+        status: :bad_request
+    end
   end
 
   def update
