@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       resources :items, only: [:index, :show]
       resources :management_forms, only: [:update]
       resources :campaign_items, only: [:create, :update]
-      resources :users, only: [:show] do
+      resources :users, only: [:index, :show] do
         resources :user_campaigns, only: [:index]
       end
       resources :user_campaigns, only: [:create, :update]
