@@ -1,6 +1,12 @@
 class Api::V1::UserCampaignsController < ApplicationController
   def create
     user_campaign = UserCampaign.new(user_campaign_params)
+
+    if params[:user_campaign][:username]
+      invited_user = User.find_by(username: params[:user_campaign][:username].downcase)
+      user_campaign.user_id = invited_user.id
+    end
+
     user_campaign.save!
     render json: UserCampaignSerializer.new(user_campaign), status: 201
   end
@@ -9,7 +15,7 @@ class Api::V1::UserCampaignsController < ApplicationController
     if user = User.find_by(uid: params[:user_id])
       campaigns = user.user_campaigns
       render json: UserCampaignSerializer.new(campaigns)
-    else 
+    else
       render json: { errors: [{status: '400', title:"Couldn't find that user" }]},
         status: :bad_request
     end
