@@ -1,4 +1,5 @@
 # The Sunken Isles First Mate
+[Deployed Site](https://first-mate-fe-0787570249fd.herokuapp.com/)
 
 ## Table of Contents
 - [Getting Started](#getting-started)
@@ -7,7 +8,6 @@
 - [End Points](#end-points)
 - [Contributors](#contributors)
 - [FE Repo](https://github.com/The-Sunken-Isles-First-Mate/first-mate-fe)
-- [Deployment (INSERT HEROKU LINK HERE)
 
 ## Getting Started
 ### Versions
@@ -19,13 +19,6 @@
 The Sunken Isles First Mate is a companion app designed to support some additional functionality built-in to the Sunken Isles DnD Campaign.  The Dungeon Master (DM) of a Sunken Isles campaign can create a campaign in our app which the party-members can then join and chreate their character.  From here, the party-members will decide on how to assign work to their villagers, what resources to collect, and what items to build.  At the end of an in-game week, the DM will go to their campaign management page, advance the week, and all of the exploration and crafting will be enacted and shown on the new summary page.  Now the DM can take this information into the next session, further expanding on the magical world of the Sunken Isles! 
 
 This app was designed and built with a team of 5 developers as part of the [consultancy project](https://backend.turing.edu/module3/projects/consultancy/), from Turing School of Software and Design.
-
-<details>
-  <summary>Learning Goals for Project</summary>
-- goal 1
-- goal 2
-- goal 3
-</details>
 
 <details>
   <summary>Setup</summary>
@@ -225,15 +218,10 @@ end
 
   - [AWS S3 documentation](https://aws.amazon.com/s3/)
 
-#### GitHub OAuth
-  - WRITE UP GH OAUTH DESCRIPTION HERE
+#### Google OAuth
+  - In our application, we leverage Google OAuth to manage user authentication and authorization. By using Google OAuth, we provide a seamless and secure login experience for our users, allowing them to authenticate using their existing Google accounts. This approach not only enhances user convenience but also reduces the burden of managing user credentials and authentication flows internally.
 
-  - [GitHub Documentation](INSERT LINK HERE)
-
-#### DnD 5e SRD API
-  - While limited in it's scope, the API provides all class and race data that we use in our character creation feature.  Unfortunately, there is a lot of missing information from the database, leading us to not use it as thoroughly as we expected.  There is talk in forums online that the API may be getting a major update soon, and if this is the case, we'd love to utilize the API for item creation and resources, especially if images are included in a future update.
-
-  - [DnD 5e SRD API Documentation](https://5e-bits.github.io/docs/api)
+  - [Google OAuth documentation](https://developers.google.com/identity/protocols/oauth2)
 
 ## End Points
 ### User
@@ -252,9 +240,9 @@ Body:
 
 ```json
 {
-  user: {
-    "username": 'randomusername',
-    "token": '1jkfdsa9cj,32jjcnkldsluiouijkjfd'
+  "user": {
+    "username": "randomusername",
+    "token": "1jkfdsa9cj,32jjcnkldsluiouijkjfd"
     }
 }
 ```
